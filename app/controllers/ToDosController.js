@@ -21,7 +21,7 @@ class ToDosController {
         }
     }
 
-    store(req, res){
+    async store(req, res){
         const errors = this.validationResult(req)
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() })
@@ -33,16 +33,9 @@ class ToDosController {
             completed: false,
         });
 
-        todo.save(function(err) {
-            if(err) {
-                res.status(505).send({
-                    success: false,
-                })
-            } else {
-                res.status(200).send({
-                    success: true
-                })
-            }
+        const saved = await todo.save()
+        res.status(200).send({
+            success: saved,
         })
     }
 
