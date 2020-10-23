@@ -7,17 +7,15 @@ class ToDosController {
         this.update = this.update.bind(this)
     }
 
-    index(req, res){
+    async index(req, res){
         try {
-            this.ToDo.find(function(err, todos){
-                if(err){
-                    res.status(505).send([])
-                }
-                else{
-                    res.status(200).send(todos)
-                }
-            })
-            res.send("Hooray!")
+            const todos = await this.ToDo.find({})
+            if(todos){
+                res.status(200).send(todos)
+            }
+            else{
+                res.status(505).send([])
+            }
         } catch(e){
             res.send(e)
         }
