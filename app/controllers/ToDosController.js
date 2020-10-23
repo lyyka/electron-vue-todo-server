@@ -8,14 +8,19 @@ class ToDosController {
     }
 
     index(req, res){
-        this.ToDo.find(function(err, todos){
-            if(err){
-                res.status(505).send([])
-            }
-            else{
-                res.status(200).send(todos)
-            }
-        })
+        try {
+            this.ToDo.find(function(err, todos){
+                if(err){
+                    res.status(505).send([])
+                }
+                else{
+                    res.status(200).send(todos)
+                }
+            })
+            res.send("Hooray!")
+        } catch(e){
+            res.send(e)
+        }
     }
 
     store(req, res){
