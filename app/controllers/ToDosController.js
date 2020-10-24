@@ -46,7 +46,7 @@ class ToDosController {
         }
 
         let todo = await this.ToDo.findById(req.body._id);
-        if(todo !== undefined){
+        if(todo){
             todo.body = req.body.body
             todo.due_date = req.body.due_date
             todo.completed = req.body.completed
