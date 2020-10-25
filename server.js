@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // Routes
 app.use(require('cors')())
 app.use('/api/todos', require('./app/routeHandlers/ToDosRouteHandler'))
+app.use('/api/auth', require('./app/routeHandlers/AuthRouteHandler'))
 
 // Start the server
 app.listen(process.env.PORT, () => { 
