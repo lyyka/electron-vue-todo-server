@@ -29,7 +29,9 @@ class AuthController {
             }
         }
         return res.status(401).send({
-            'email': 'Incorrect credential'
+            errors: {
+                'email': 'Incorrect credentials'
+            }
         })
     }
 
