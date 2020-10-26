@@ -21,7 +21,7 @@ class AuthController {
                     updated_at: user.updated_at,
                 }
                 const token = this.jwt.sign(jwtPayload, process.env.JWT_SECRET, {
-                    expiresIn: '2 hours'
+                    expiresIn: '24 hours'
                 })
                 return res.status(201).send({
                     jwt: token,

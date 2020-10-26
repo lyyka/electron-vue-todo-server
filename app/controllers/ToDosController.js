@@ -12,14 +12,13 @@ class ToDosController {
     async index(req, res){
         try {
             const user = await User.findById(req.user.id)
+            let response = []
             if(user !== null){
-                return res.status(200).send(user.todos)
+                response = user.todos
             }
-            else{
-                return res.status(200).send([])
-            }
+            return res.status(200).send(response)
         } catch(e){
-            res.status(500).send([])
+            res.sendStatus(500)
         }
     }
 
@@ -66,7 +65,6 @@ class ToDosController {
             })
         }
         catch(e) {
-            console.log(e)
             res.sendStatus(500)
         }
     }
