@@ -1,8 +1,9 @@
+const mongoose = require('mongoose')
+const { ToDo } = require('../models/ToDo')
+const User = require('../models/User')
+
 class ToDosController {
     constructor(){
-        this.ToDo = require('../models/ToDo').ToDo
-        this.User = require('../models/User')
-        this.validationResult = require('express-validator').validationResult
         this.index = this.index.bind(this)
         this.store = this.store.bind(this)
         this.update = this.update.bind(this)
@@ -10,7 +11,7 @@ class ToDosController {
 
     async index(req, res){
         try {
-            const user = await this.User.findById(req.user.id)
+            const user = await User.findById(req.user.id)
             if(user !== null){
                 return res.status(200).send(user.todos)
             }
@@ -23,14 +24,14 @@ class ToDosController {
     }
 
     async store(req, res){
-        const todo = new this.ToDo({
+        const todo = new ToDo({
             body: req.body.body,
             due_date: req.body.due_date,
             completed: false,
         });
 
         try {
-            const user = await this.User.findById(req.user.id)
+            const user = await User.findById(req.user.id)
             if(user !== null){
                 user.todos.push(todo)
                 user.save()
@@ -50,24 +51,22 @@ class ToDosController {
 
     async update(req, res){
         try{
-            let todo = await this.ToDo.findById(req.body._id);
-            if(todo){
-                todo.body = req.body.body
-                todo.due_date = req.body.due_date
-                todo.completed = req.body.completed
-
-                const saved = await todo.save()
-                res.status(200).send({
-                    success: saved !== null,
-                })
-            }
-            else{
-                res.status(500).send({
-                    success: false,
-                })
-            }
+            let update = await User.updateOne(
+                {_id: req.user.id, 'todos._id': mongoose.Types.ObjectId(req.body._id)}, 
+                {
+                    "$set": {
+                        "todos.$.body": req.body.body,
+                        "todos.$.due_date": req.body.due_date,
+                        "todos.$.completed": req.body.completed,
+                    }
+                }
+            )
+            return res.status(200).send({
+                success: update !== null,
+            })
         }
         catch(e) {
+            console.log(e)
             res.sendStatus(500)
         }
     }
