@@ -36,6 +36,7 @@ class ToDosController {
                 user.save()
                 return res.status(201).send({
                     success: true,
+                    todo: todo,
                 })
             }
 
